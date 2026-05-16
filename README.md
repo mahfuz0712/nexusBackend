@@ -41,7 +41,7 @@ import {
   errorMiddleware,
   NotFoundError,
   ValidationError,
-} from "nexusjs";
+} from "nexus-backend";
 
 const app = express();
 app.use(express.json());
