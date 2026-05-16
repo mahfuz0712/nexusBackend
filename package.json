@@ -1,0 +1,22 @@
+{
+  "name": "nexus-backend",
+  "version": "1.0.0",
+  "description": "Backend utility library for Express.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "peerDependencies": {
+    "express": "^5.0.6"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "tsup": "^8.5.1",
+    "typescript": "^5.8.3"
+  }
+}
