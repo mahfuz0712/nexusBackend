@@ -1,6 +1,6 @@
 {
   "name": "nexus-backend",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Backend utility library for Express.js",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -19,7 +19,8 @@
     "helmet": "^8.1.0",
     "mongoose": "^9.6.2",
     "morgan": "^1.10.1",
-    "socket.io": "^4.8.3"
+    "socket.io": "^4.8.3",
+    "node-cache": "5.1.2"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.10",

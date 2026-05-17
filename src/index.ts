@@ -9,6 +9,7 @@ export { default as ForbiddenError } from "./errors/ForbiddenError";
 export { default as NotFoundError } from "./errors/NotFoundError";
 export { default as ValidationError } from "./errors/ValidationError";
 export { default as errorMiddleware } from "./handlers/errorHandler";
-
+export { Cache } from "./utils/cache";
+export { default as cacheMemory } from "./utils/cacheMemory";
 export type { SuccessResponse, ErrorResponse } from "./types/response.types";
 export { type MongoConfig } from "./types/mongoConfig.types";
