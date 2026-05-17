@@ -1,6 +1,6 @@
 {
   "name": "nexus-backend",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Backend utility library for Express.js",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

@@ -11,5 +11,6 @@ export { default as ValidationError } from "./errors/ValidationError";
 export { default as errorMiddleware } from "./handlers/errorHandler";
 export { Cache } from "./utils/cache";
 export { default as cacheMemory } from "./utils/cacheMemory";
+export {default as random} from "./utils/randomNum";
 export type { SuccessResponse, ErrorResponse } from "./types/response.types";
 export { type MongoConfig } from "./types/mongoConfig.types";
