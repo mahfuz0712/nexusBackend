@@ -21,13 +21,14 @@ A lightweight backend utility library for [Express.js](https://expressjs.com/) p
 ## Installation
 
 ```bash
-npm install nexus-backend
+
+npm install express mongoose cors helmet morgan cookie-parser
 ```
 
-Express is a peer dependency — make sure it is installed in your project:
+Express, mongoose, cors, helmet, morgan, and cookie-parser are peer dependencies — make sure they are installed in your project:
 
 ```bash
-npm install express
+npm install nexus-backend
 ```
 
 ---
@@ -35,39 +36,97 @@ npm install express
 ## Quick Start
 
 ```ts
-import express from "express";
+// src/config/mongoConfig.ts
+import { type MongoConfig } from "nexus-backend";
+
+const dbConfig: MongoConfig = {
+  subDomain: requiredEnv(process.env.DB_HOST, "DB_HOST"),
+  userName: requiredEnv(process.env.DB_USERNAME, "DB_USERNAME"),
+  password: requiredEnv(process.env.DB_PASSWORD, "DB_PASSWORD"),
+  cluster: requiredEnv(process.env.DB_CLUSTER, "DB_CLUSTER"),
+  dbName: requiredEnv(process.env.DB_NAME, "DB_NAME"),
+};
+export default dbConfig;
+```
+
+```ts
+// src/server.ts
+import express, { type Application, Request, Response } from "express";
+import http from "http";
 import {
   successResponse,
   errorMiddleware,
   NotFoundError,
   ValidationError,
 } from "nexus-backend";
+import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
+import cookieParser from "cookie-parser";
+import { Server } from "socket.io";
 
-const app = express();
-app.use(express.json());
+const app: Application = express();
+
+if (process.env.NODE_ENV !== "production") {
+  app.use(morgan("dev"));
+}
+app.set("trust proxy", 1);
+app.use(helmet());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  }),
+);
+
+app.use(express.json({ limit: "500mb" })); // Adjust the limit as needed
+app.use(express.urlencoded({ extended: true, limit: "500mb" })); // For parsing application/x-www-form-urlencoded
+app.use(cookieParser());
 
 // Example route
-app.get("/users/:id", async (req, res, next) => {
-  try {
-    const user = await getUserById(req.params.id);
+app.get("/users/:id", async (req: Request, res: Response) => {
+  const user = await getUserById(req.params.id);
 
-    if (!user) {
-      throw new NotFoundError("User not found");
-    }
-
-    res.json(successResponse(user, "User fetched successfully"));
-  } catch (err) {
-    next(err);
+  if (!user) {
+    throw new NotFoundError("User not found");
   }
+
+  res.json(successResponse(user, "User fetched successfully"));
 });
 
 // Register error middleware last
 app.use(errorMiddleware);
+const server = http.createServer(app);
+export const io = new Server(server, {
+  cors: {
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  },
+});
 
-app.listen(3000);
+export default server;
 ```
 
----
+```ts
+// src/index.ts
+import "dotenv/config";
+import { connectMongoDb } from "nexus-backend";
+import dns from "dns";
+import dbConfig from "./config/mongoConfig";
+import server from "./server";
+const PORT = process.env.PORT || 5000;
+async () => {
+  dns.setServers(["1.1.1.1", "1.0.0.1"]);
+  const dbConnected = await connectMongoDb(dbConfig);
+  if (!dbConnected) {
+    console.error("Database connection failed. Exiting...");
+    process.exit(1);
+  }
+  server.listen(PORT, () => {
+    console.log(`Server running on ${PORT}`);
+  });
+};
+```
 
 ## API Reference
 
@@ -84,9 +143,9 @@ successResponse<T>(data: T, message?: string): SuccessResponse<T>
 **Example**
 
 ```ts
-res.status(200).json(
-  successResponse({ id: 1, name: "Alice" }, "User fetched successfully")
-);
+res
+  .status(200)
+  .json(successResponse({ id: 1, name: "Alice" }, "User fetched successfully"));
 ```
 
 ```json
@@ -110,9 +169,11 @@ errorResponse(message: string, errors?: any, stack?: string): ErrorResponse
 **Example**
 
 ```ts
-res.status(400).json(
-  errorResponse("Validation failed", { field: "email", issue: "Required" })
-);
+res
+  .status(400)
+  .json(
+    errorResponse("Validation failed", { field: "email", issue: "Required" }),
+  );
 ```
 
 ```json
@@ -137,12 +198,12 @@ The base error class. Use this when none of the specific subclasses fit your use
 new ApiError(message: string, statusCode?: number, errors?: any, isOperational?: boolean)
 ```
 
-| Parameter | Type | Default | Description |
-|---|---|---|---|
-| `message` | `string` | — | Human-readable error message |
-| `statusCode` | `number` | `500` | HTTP status code |
-| `errors` | `any` | `undefined` | Additional error details or field errors |
-| `isOperational` | `boolean` | `true` | Marks the error as an expected operational error |
+| Parameter       | Type      | Default     | Description                                      |
+| --------------- | --------- | ----------- | ------------------------------------------------ |
+| `message`       | `string`  | —           | Human-readable error message                     |
+| `statusCode`    | `number`  | `500`       | HTTP status code                                 |
+| `errors`        | `any`     | `undefined` | Additional error details or field errors         |
+| `isOperational` | `boolean` | `true`      | Marks the error as an expected operational error |
 
 ---
 
