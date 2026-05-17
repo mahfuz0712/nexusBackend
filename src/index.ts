@@ -14,3 +14,5 @@ export { default as cacheMemory } from "./utils/cacheMemory";
 export {default as random} from "./utils/randomNum";
 export type { SuccessResponse, ErrorResponse } from "./types/response.types";
 export { type MongoConfig } from "./types/mongoConfig.types";
+export {type MailerConfig, EmailOptions} from "./types/mailerConfig.types";
+export {default as Mailer} from "./utils/mailer";
