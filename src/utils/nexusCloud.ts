@@ -70,6 +70,7 @@ const uploader = {
   try {
     const res = await axios.get(`${BASE_URL}/getFile`, {
       params: { file_id: fileId },
+      timeout: 15000
     });
 
     if (!res.data?.ok || !res.data?.result?.file_path) {
