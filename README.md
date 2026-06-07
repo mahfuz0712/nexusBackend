@@ -37,7 +37,7 @@ npm install nexus-backend
 
 ```ts
 // src/config/mongoConfig.ts
-import { type MongoConfig } from "nexus-backend";
+import { requiredEnv, type MongoConfig } from "nexus-backend";
 
 const dbConfig: MongoConfig = {
   subDomain: requiredEnv(process.env.DB_HOST, "DB_HOST"),
