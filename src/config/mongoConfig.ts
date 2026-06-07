@@ -1,18 +1,23 @@
+// connectMongoDb.ts
 import mongoose from "mongoose";
 import type { MongoConfig } from "../types/mongoConfig.types";
 
 export const connectMongoDb = async (config: MongoConfig) => {
-  const { subDomain, userName, password, cluster, dbName } = config;
+  const { subDomain, userName, password, cluster, dbName, shards, replicaSet } = config;
 
-  const srvURL = `mongodb+srv://${userName}:${password}@${cluster.toLowerCase()}.${subDomain}.mongodb.net/${dbName}?retryWrites=true&w=majority&appName=${cluster.toLowerCase()}`;
+  const hosts = shards
+    .map(s => `${s}.${subDomain}.mongodb.net:27017`)
+    .join(",");
+
+  const uri = `mongodb://${userName}:${password}@${hosts}/${dbName}?ssl=true&replicaSet=${replicaSet}&authSource=admin&appName=${cluster}`;
 
   try {
-    console.log("Trying +srv connection...");
-    await mongoose.connect(srvURL);
+    console.log("Connecting to MongoDB...");
+    await mongoose.connect(uri);
     console.log("Connected to MongoDB Atlas");
     return true;
   } catch (err: any) {
-    console.error("+srv connection failed:", err.message);
+    console.error("Connection failed:", err.message);
     return false;
   }
 };
