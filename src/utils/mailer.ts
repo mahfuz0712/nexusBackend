@@ -24,7 +24,7 @@ class Mailer {
         from: `${this.config.brandName} <${this.config.fromEmail}>`,
         to: [to],
         subject: subject,
-        react: body, // or 'text: body' depending on your needs
+        html: body, // or 'text: body' depending on your needs
       });
 
       console.log("SMTP Response:", response);
