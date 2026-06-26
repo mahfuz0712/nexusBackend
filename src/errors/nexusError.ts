@@ -1,4 +1,4 @@
-export default class ApiError extends Error {
+export default class NexusError extends Error {
   statusCode: number;
   isOperational: boolean;
   errors?: any;

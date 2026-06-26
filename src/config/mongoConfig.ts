@@ -1,4 +1,4 @@
-// connectMongoDb.ts
+// mongoConfig.ts
 import mongoose from "mongoose";
 import type { MongoConfig } from "../types/mongoConfig.types";
 

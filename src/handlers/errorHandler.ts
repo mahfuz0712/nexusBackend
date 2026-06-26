@@ -1,10 +1,10 @@
 // errorHandler.ts
 import { Request, Response, NextFunction } from "express";
-import ApiError from "../errors/ApiError";
+import NexusError from "../errors/nexusError";
 import { errorResponse } from "../responses/errorResponse";
 
 const routeNotFoundHandler = (req: Request, _: Response, next: NextFunction) => {
-  next(new ApiError(`Route ${req.originalUrl} not found`, 404));
+  next(new NexusError(`Route ${req.originalUrl} not found`, 404));
 };
 
 const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
@@ -14,7 +14,7 @@ const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFun
   let errors = undefined;
   let stack = undefined;
 
-  if (err instanceof ApiError) {
+  if (err instanceof NexusError) {
     statusCode = err.statusCode;
     message = err.message;
     errors = err.errors;

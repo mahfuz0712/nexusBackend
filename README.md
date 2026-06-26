@@ -1,4 +1,4 @@
-# Nexus Backend
+# Nexus Backend ( A sub project of Nexus JS)
 
 A lightweight backend utility library for [Express.js](https://expressjs.com/) providing structured error classes, standardised API response helpers, and a plug-and-play error handling middleware.
 
