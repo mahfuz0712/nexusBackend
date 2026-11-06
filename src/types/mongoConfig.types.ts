@@ -4,6 +4,4 @@ export interface MongoConfig {
   password: string;
   cluster: string;
   dbName: string;
-  shards: [string, string, string];
-  replicaSet: string;
 }

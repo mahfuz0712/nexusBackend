@@ -1,7 +1,6 @@
 export { successResponse } from "./responses/successResponse";
 export { errorResponse } from "./responses/errorResponse";
-export { requiredEnv } from "./utils/envManager";
-export { connectMongoDb } from "./config/mongoConfig";
+export { connectMongoDB } from "./config/mongoConfig";
 export { default as NexusError  } from "./errors/nexusError";
 export { default as errorMiddleware } from "./handlers/errorHandler";
 export { Cache } from "./utils/cache";

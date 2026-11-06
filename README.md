@@ -46,25 +46,19 @@ npm install axios form-data multer
 These are peer dependencies — make sure they're installed in your project.
 
 ---
-
-## Quick Start
+## Backend Setup
 
 ```ts
 // src/config/mongoConfig.ts
-import { requiredEnv, type MongoConfig } from "nexus-backend";
+import { type MongoConfig } from "nexus-backend";
 
 const dbConfig: MongoConfig = {
-  subDomain: requiredEnv(process.env.DB_HOST, "DB_HOST"),
-  userName: requiredEnv(process.env.DB_USERNAME, "DB_USERNAME"),
-  password: requiredEnv(process.env.DB_PASSWORD, "DB_PASSWORD"),
-  cluster: requiredEnv(process.env.DB_CLUSTER, "DB_CLUSTER"),
-  dbName: requiredEnv(process.env.DB_NAME, "DB_NAME"),
-  shards: [
-    requiredEnv(process.env.DB_SHARD_1, "DB_SHARD_1"),
-    requiredEnv(process.env.DB_SHARD_2, "DB_SHARD_2"),
-    requiredEnv(process.env.DB_SHARD_3, "DB_SHARD_3"),
-  ],
-  replicaSet: requiredEnv(process.env.DB_REPLICA_SET, "DB_REPLICA_SET"),
+  subDomain: process.env.DB_SUBDOMAIN,
+  userName: process.env.DB_USERNAME,
+  password: process.env.DB_PASSWORD,
+  cluster: process.env.DB_CLUSTER,
+  dbName: process.env.DB_NAME,
+
 };
 
 export default dbConfig;
@@ -132,7 +126,7 @@ export default server;
 ```ts
 // src/index.ts
 import "dotenv/config";
-import { connectMongoDb } from "nexus-backend";
+import { connectMongoDB } from "nexus-backend";
 import dns from "dns";
 import dbConfig from "./config/mongoConfig";
 import server from "./server";
@@ -141,7 +135,7 @@ const PORT = process.env.PORT || 5000;
 
 (async () => {
   dns.setServers(["1.1.1.1", "1.0.0.1"]);
-  const dbConnected = await connectMongoDb(dbConfig);
+  const dbConnected = await connectMongoDB(dbConfig);
   if (!dbConnected) {
     console.error("Database connection failed. Exiting...");
     process.exit(1);
