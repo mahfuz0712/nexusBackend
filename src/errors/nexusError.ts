@@ -11,10 +11,12 @@ export default class NexusError extends Error {
   ) {
     super(message);
 
+    this.name = "NexusError";
     this.statusCode = statusCode;
     this.errors = errors;
     this.isOperational = isOperational;
 
+    Object.setPrototypeOf(this, new.target.prototype);
     Error.captureStackTrace(this, this.constructor);
   }
 }
