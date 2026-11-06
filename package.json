@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mahfuz0712/nexusBackend.git"
+    "url": "git+https://github.com/mahfuz0712/nexusBackend.git"
   },
   "homepage": "https://github.com/mahfuz0712/nexusBackend",
   "bugs": {
